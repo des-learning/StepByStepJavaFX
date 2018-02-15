@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="contohradiobutton.ContohRadioButtonController">
+   <children>
+      <TextField fx:id="txtNama" layoutX="14.0" layoutY="14.0" promptText="Nama" />
+      <Button fx:id="btnHello" layoutX="524.0" layoutY="14.0" mnemonicParsing="false" text="Hello" />
+      <RadioButton fx:id="rdoPria" layoutX="195.0" layoutY="18.0" mnemonicParsing="false" selected="true" text="Pria">
+         <toggleGroup>
+            <ToggleGroup fx:id="tglJenisKelamin" />
+         </toggleGroup>
+      </RadioButton>
+      <RadioButton fx:id="rdoWanita" layoutX="322.0" layoutY="18.0" mnemonicParsing="false" text="Wanita" toggleGroup="$tglJenisKelamin" />
+      <Label fx:id="lblHello" layoutX="14.0" layoutY="46.0" prefHeight="59.0" prefWidth="563.0" />
+   </children>
+</AnchorPane>
