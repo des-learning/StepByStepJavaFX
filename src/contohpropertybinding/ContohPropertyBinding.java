@@ -10,7 +10,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.util.StringConverter;
 
 public class ContohPropertyBinding extends Application {
     @Override
@@ -67,22 +66,5 @@ public class ContohPropertyBinding extends Application {
 
     public static void main(String []args) {
         launch();
-    }
-}
-
-// Convert Integer menjadi String
-class IntegerStringConverter extends StringConverter<Number> {
-    @Override
-    public String toString(Number integer) {
-        return integer.toString();
-    }
-
-    @Override
-    public Number fromString(String s) {
-        try {
-            return Integer.valueOf(s);
-        } catch (NumberFormatException e) {
-            return 0;
-        }
     }
 }
