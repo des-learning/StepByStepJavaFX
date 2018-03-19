@@ -41,11 +41,9 @@ public class ContohPropertyBinding extends Application {
 
         // expression yang dibinding ke property, untuk menghasilkan nilai dinamis
         // contoh: Budi, 20 tahun
-        StringProperty panggilan = new SimpleStringProperty("");
-        panggilan.bind(
-                Bindings.when(manusia.jenisKelaminProperty()
-                        .isEqualTo(new SimpleBooleanProperty(true)))
-                        .then("Bapak").otherwise("Ibu"));
+        StringExpression panggilan = Bindings.when(
+                manusia.jenisKelaminProperty().isEqualTo(new SimpleBooleanProperty(true)))
+                .then("Bapak").otherwise("Ibu");
         StringExpression expr =
                 panggilan.concat(" ").concat(
                 manusia.namaProperty().concat(
