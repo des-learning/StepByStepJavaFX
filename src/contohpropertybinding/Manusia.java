@@ -1,6 +1,8 @@
 package contohpropertybinding;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -12,10 +14,12 @@ public class Manusia {
     // pakai property untuk atribut
     private StringProperty nama;
     private IntegerProperty umur;
+    private BooleanProperty jenisKelamin;
 
-    public Manusia(String nama, Integer umur) {
+    public Manusia(String nama, Integer umur, Boolean jenisKelamin) {
         this.nama = new SimpleStringProperty(nama);
         this.umur = new SimpleIntegerProperty(umur);
+        this.jenisKelamin = new SimpleBooleanProperty(jenisKelamin);
     }
 
     public String getNama() {
@@ -41,6 +45,12 @@ public class Manusia {
     public void setUmur(int umur) {
         this.umur.set(umur);
     }
+
+    public Boolean getJenisKelamin() { return jenisKelamin.get(); }
+
+    public void setJenisKelamin(boolean jenisKelamin) { this.jenisKelamin.set(jenisKelamin); }
+
+    public BooleanProperty jenisKelaminProperty() { return jenisKelamin; }
 
     @Override
     public boolean equals(Object o) {

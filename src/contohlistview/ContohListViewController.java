@@ -68,12 +68,14 @@ public class ContohListViewController implements Initializable {
 
         // process event ketika event pertama kali di-capture (memberikan kesempatan kepada parent untuk meng-handle
         // event terlebih dahulu sebelum child)
-        pane.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-            // cancel edit jika user menekan tombol esc dan aplikasi dalam mode editMode
-            if (event.getCode().equals(KeyCode.ESCAPE) && editMode) {
-                cancelEdit();
-            }
-        });
+        pane.addEventFilter(KeyEvent.KEY_PRESSED, (event) -> this.onKeyEscapePressed(event));
+    }
+
+    private void onKeyEscapePressed(KeyEvent event) {
+        // cancel edit jika user menekan tombol esc dan aplikasi dalam mode editMode
+        if (event.getCode().equals(KeyCode.ESCAPE) && editMode) {
+            cancelEdit();
+        }
     }
 
     // inner class

@@ -38,15 +38,34 @@ public class ContohTableViewController implements Initializable {
         columnUmur.setCellValueFactory(new PropertyValueFactory<>("umur"));
     }
 
-    public void onBtnSimpanClick(ActionEvent event) {
+    private String getNamaFromInput() throws IllegalArgumentException {
         String nama = txtNama.getText().trim();
+        if (nama.equals("")) throw new IllegalArgumentException("nama tida boleh kosong");
+        return nama;
+    }
+
+    public void onBtnSimpanClick(ActionEvent event) {
+        String nama = "";
+        try {
+            nama = getNamaFromInput();
+        } catch (IllegalArgumentException e) {
+            messageBox("Contoh Table View", e.getMessage()).showAndWait();
+            txtNama.requestFocus();
+        }
         Integer umur = 0;
         try {
             umur = Integer.valueOf(txtUmur.getText());
+            if (umur < 0 || umur > 200) throw new IllegalArgumentException("Umur hanya boleh dari 0-200");
         } catch (NumberFormatException e) {
-            messageBox("Contoh Table View", "Umur salah").showAndWait();
+            messageBox("Contoh Table View", "Umur hanya boleh angka").showAndWait();
             txtUmur.selectAll();
             txtUmur.requestFocus();
+            return;
+        } catch (IllegalArgumentException e) {
+            messageBox("Contoh Table View", e.getMessage()).showAndWait();
+            txtUmur.selectAll();
+            txtUmur.requestFocus();
+            txtUmur.selectAll();
             return;
         }
         txtNama.clear();
