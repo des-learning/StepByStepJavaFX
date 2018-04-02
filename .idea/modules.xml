@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/StepByStepJavaFX.iml" filepath="$PROJECT_DIR$/.idea/StepByStepJavaFX.iml" />
+      <module fileurl="file://$PROJECT_DIR$/contohjdbi/contohjdbi.iml" filepath="$PROJECT_DIR$/contohjdbi/contohjdbi.iml" />
     </modules>
   </component>
 </project>
