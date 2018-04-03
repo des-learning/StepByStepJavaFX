@@ -172,4 +172,21 @@ public class MahasiswaDao {
             return -1;
         }
     }
+
+    public List<Mahasiswa> byPage(int page, int itemPerPage) throws SQLException {
+        String sql = "SELECT * FROM Mahasiswa Limit ? OFFSET ?";
+        stmt = conn.prepareStatement(sql);
+
+        stmt.setInt(1, itemPerPage);
+        stmt.setInt(2, itemPerPage*page);
+
+        List<Mahasiswa> mhs = new ArrayList<>();
+        ResultSet resultSet = stmt.executeQuery();
+
+        while (resultSet.next()) mhs.add(
+                new Mahasiswa(resultSet.getString("NIM"),
+                        resultSet.getString("nama")));
+
+        return mhs;
+    }
 }

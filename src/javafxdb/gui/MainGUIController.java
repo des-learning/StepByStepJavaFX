@@ -1,7 +1,9 @@
 package javafxdb.gui;
 
 import javafx.application.Platform;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -42,8 +44,21 @@ public class MainGUIController implements Initializable {
     @FXML
     private Button btnSaring;
 
+    @FXML
+    private Label lblCurrentPage;
+
+    @FXML
+    private Label lblTotalPage;
+
+    @FXML
+    private Button btnNext;
+
     private MahasiswaDao dao;
     private ListProperty<Mahasiswa> mhs;
+    private IntegerProperty currentPage = new SimpleIntegerProperty();
+    private IntegerProperty totalPages = new SimpleIntegerProperty();
+    private int itemsCount;
+    private int itemsPerPage;
 
     String saring;
 
@@ -53,18 +68,28 @@ public class MainGUIController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        currentPage.setValue(1);
+        itemsPerPage = 2;
         // load semua data mahasiswa
-        try {
-
-            mhs = new SimpleListProperty<>(FXCollections.observableArrayList());
+        /* try {
             mhs.addAll(dao.all());
-            tableMhs.itemsProperty().bind(mhs);
 
-            columnNama.setCellValueFactory(new PropertyValueFactory<>("nama"));
-            columnNIM.setCellValueFactory(new PropertyValueFactory<>("NIM"));
         } catch (SQLException e) {
             e.printStackTrace();
-        }
+        } */
+        mhs = new SimpleListProperty<>(FXCollections.observableArrayList());
+        tableMhs.itemsProperty().bind(mhs);
+        columnNama.setCellValueFactory(new PropertyValueFactory<>("nama"));
+        columnNIM.setCellValueFactory(new PropertyValueFactory<>("NIM"));
+
+        runSQL(() -> {
+            itemsCount = dao.count();
+            totalPages.setValue(Math.ceil(itemsCount *1.0 / itemsPerPage));
+            mhs.addAll(dao.byPage(currentPage.getValue()-1, itemsPerPage));
+        });
+
+        lblCurrentPage.textProperty().bind(currentPage.asString());
+        lblTotalPage.textProperty().bind(totalPages.asString());
 
         btnSaring.setOnAction(event -> {
             saring = txtSaring.getText();
@@ -82,7 +107,9 @@ public class MainGUIController implements Initializable {
             if (event.getCode() == KeyCode.DELETE) {
                 runSQL(() -> dao.delete(tableMhs.getSelectionModel().getSelectedItem()));
                 mhs.clear();
-                runSQL( () -> mhs.addAll(dao.all()));
+                runSQL( () -> {
+                    mhs.addAll(dao.byPage(currentPage.getValue()-1, itemsPerPage));
+                });
             }
         });
 
@@ -93,7 +120,8 @@ public class MainGUIController implements Initializable {
                 runSQL(() -> {
                     dao.add(m);
                     mhs.clear();
-                    mhs.addAll(dao.all());
+                    // mhs.addAll(dao.all());
+                    mhs.addAll(dao.byPage(currentPage.getValue()-1, itemsPerPage));
                 });
             }
         });
@@ -105,9 +133,20 @@ public class MainGUIController implements Initializable {
                     runSQL(() -> {
                         dao.update(m);
                         mhs.clear();
-                        mhs.addAll(dao.all());
+                        //mhs.addAll(dao.all());
+                        mhs.addAll(dao.byPage(currentPage.getValue()-1, itemsPerPage));
                     });
                 }
+            }
+        });
+
+        btnNext.setOnAction(event -> {
+            if (currentPage.getValue() < totalPages.getValue()) {
+                currentPage.setValue(currentPage.getValue() + 1);
+                runSQL(() -> {
+                    mhs.clear();
+                    mhs.addAll(dao.byPage(currentPage.getValue() - 1, itemsPerPage));
+                });
             }
         });
     }
