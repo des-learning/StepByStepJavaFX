@@ -45,7 +45,7 @@ public class MainGUI extends Application {
         // inisialisasi gui
         FXMLLoader loader = new FXMLLoader(getClass().getResource("FormList.fxml"));
         // kirimkan dao untuk digunakan di gui
-        Initializable controller = new MainGUIController(dao);
+        Initializable controller = new MainGUIController(dao, stage);
         // set controller gui
         loader.setController(controller);
 

@@ -21,9 +21,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 import javafxdb.model.Mahasiswa;
 import javafxdb.model.MahasiswaDao;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.Optional;
@@ -45,6 +47,9 @@ public class MainGUIController implements Initializable {
     private Button btnSaring;
 
     @FXML
+    private Button btnInput;
+
+    @FXML
     private Label lblCurrentPage;
 
     @FXML
@@ -61,9 +66,12 @@ public class MainGUIController implements Initializable {
     private int itemsPerPage;
 
     String saring;
+    // primary stage, untuk dikirim ke form input sebagai parent window
+    Stage stage;
 
-    public MainGUIController(MahasiswaDao dao) {
+    public MainGUIController(MahasiswaDao dao, Stage stage) {
         this.dao = dao;
+        this.stage = stage;
     }
 
     @Override
@@ -147,6 +155,28 @@ public class MainGUIController implements Initializable {
                     mhs.clear();
                     mhs.addAll(dao.byPage(currentPage.getValue() - 1, itemsPerPage));
                 });
+            }
+        });
+
+        btnInput.setOnAction(event -> {
+            // create form input (with controller)
+            FormInput formInput = new FormInput();
+            try {
+                // tampilkan form input dan tunggu sampai form ditutup (sudah ada hasil)
+                // hasil dari form ini adalah optional, ada data mahasiswa yang diinput (apabila user menekan tombol
+                // simpan atau empty apabila form ditutup
+                Optional<Mahasiswa> optionalMahasiswa = formInput.showAndWait(this.stage);
+                // jika ada data mahasiswa
+                optionalMahasiswa.ifPresent(m -> {
+                    // tambahkan ke database
+                    runSQL(() -> {
+                        dao.add(m);
+                        mhs.clear();
+                        mhs.addAll(dao.byPage(currentPage.getValue() - 1, itemsPerPage));
+                    });
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         });
     }
